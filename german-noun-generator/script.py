@@ -27,7 +27,11 @@ for line in input_content:
 
     # print out the noun we're currently processing, and write the correct fields to the relevant file
     print(line[0])
-    plural_writer.writerow([line[0], line[1]])
+
+    if line[1] != "":
+        # we won't always have a plural form (some nouns are singular only) so in those cases, we don't 
+        # want to make a card for the plural
+        plural_writer.writerow([line[0], line[1]])
     def_writer.writerow([line[0], line[2]])
 
     line_count += 1

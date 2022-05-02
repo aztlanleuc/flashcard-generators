@@ -1,18 +1,15 @@
-import csv
+from csv import reader, writer
 
 # the input file should be a tsv with a header row, and 3 columns
 # they should be the singular form of the noun, the plural form, and then the translation
-input_file = open("input-nouns.tsv")
-input_content = csv.reader(input_file, delimiter="\t")
+input_file = open("input-nouns.csv")
+input_content = reader(input_file)
 
 # we want to have two output files: one for plural/singular cards and one for definition cards
 # the plural/singular file will have two columns, first the singular form then the plural
 # the definition file will also have two columns, first the singular form then the translation
-plurals_file = open("plurals-cards.tsv", "wt")
-definition_file = open("definition-cards.tsv", "wt")
-
-plural_writer = csv.writer(plurals_file, delimiter="\t")
-def_writer = csv.writer(definition_file, delimiter="\t")
+plurals_file = open("plurals-cards.csv", "w")
+definition_file = open("definition-cards.csv", "w")
 
 # keep track of the number of lines we've processed for funsies
 # TODO: time how long it takes to process?
@@ -31,8 +28,8 @@ for line in input_content:
     if line[1] != "":
         # we won't always have a plural form (some nouns are singular only) so in those cases, we don't 
         # want to make a card for the plural
-        plural_writer.writerow([line[0], line[1]])
-    def_writer.writerow([line[0], line[2]])
+        writer(plurals_file).writerow([line[0], line[1]])
+    writer(definition_file).writerow([line[0], line[2]])
 
     line_count += 1
 

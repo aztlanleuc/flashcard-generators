@@ -1,4 +1,5 @@
 from csv import DictReader, writer
+from time import process_time
 
 # the input file should be a tsv with a header row, and 8 columns
 # one for the infinitive form of the verb, and then one each for the various
@@ -14,9 +15,10 @@ conjugation_file = open("conjugation-cards.csv", "w")
 definition_file = open("definition-cards.csv", "w")
 
 
-# keep track of the number of lines we've processed for funsies
-# TODO: time how long it takes to process?
+# keep track of the number of lines we've processed and 
+# the time we started processing for funsies
 line_count = 0
+start_time = process_time()
 
 # iterate through each row and process
 for line in input_content:
@@ -36,8 +38,11 @@ for line in input_content:
 
     line_count += 1
 
-# print the number of lines processed
-print(f'processed {line_count} verbs')
+# keep track of when we finished the process
+stop_time = process_time()
+
+# print the number of lines processed and how long it took
+print(f'processed {line_count} verbs in {stop_time - start_time:.4f}s')
 
 # close all the files
 input_file.close()

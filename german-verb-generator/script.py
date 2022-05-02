@@ -1,10 +1,10 @@
-from csv import reader, writer
+from csv import DictReader, writer
 
 # the input file should be a tsv with a header row, and 8 columns
 # one for the infinitive form of the verb, and then one each for the various
 # conjugated forms (ich, du, er/sie/es, wir, ihr, sie, Sie)
 input_file = open("input-verbs.csv")
-input_content = reader(input_file)
+input_content = DictReader(input_file)
 
 # we want to have two output files: one for conjugation cards and one for definition cards
 # the conjugation file will have two columns, first the verb infinitive with a pronoun in brackets,
@@ -20,30 +20,24 @@ line_count = 0
 
 # iterate through each row and process
 for line in input_content:
-    # skip the header row of the input data
-    if line_count == 0:
-        line_count += 1
-        continue
-
     # extract out the word and conjugations, and write them to the conjugation file
-    word = line[0]
+    word = line["verb"]
     print(word)
-    writer(conjugation_file).writerow([word + " (ich)", line[2]])
-    writer(conjugation_file).writerow([word + " (du)", line[3]])
-    writer(conjugation_file).writerow([word + " (er/sie/es)", line[4]])
-    writer(conjugation_file).writerow([word + " (wir)", line[5]])
-    writer(conjugation_file).writerow([word + " (ihr)", line[6]])
-    writer(conjugation_file).writerow([word + " (sie)", line[7]])
-    writer(conjugation_file).writerow([word + " (Sie)", line[8]])
+    writer(conjugation_file).writerow([word + " (ich)", line["ich"]])
+    writer(conjugation_file).writerow([word + " (du)", line["du"]])
+    writer(conjugation_file).writerow([word + " (er/sie/es)", line["er/sie/es"]])
+    writer(conjugation_file).writerow([word + " (wir)", line["wir"]])
+    writer(conjugation_file).writerow([word + " (ihr)", line["ihr"]])
+    writer(conjugation_file).writerow([word + " (sie)", line["sie"]])
+    writer(conjugation_file).writerow([word + " (Sie)", line["Sie"]])
 
-    # write the word and defintion to the definition
-    writer(definition_file).writerow([word, line[1]])
+    # write the word and definition to the definition
+    writer(definition_file).writerow([word, line["translation"]])
 
     line_count += 1
 
-# print the number of lines processed, allowing for an off-by-one error
-# since there's a header row
-print(f'processed {line_count - 1} verbs')
+# print the number of lines processed
+print(f'processed {line_count} verbs')
 
 # close all the files
 input_file.close()

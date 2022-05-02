@@ -1,9 +1,9 @@
-from csv import reader, writer
+from csv import DictReader, writer
 
 # the input file should be a tsv with a header row, and 3 columns
 # they should be the singular form of the noun, the plural form, and then the translation
 input_file = open("input-nouns.csv")
-input_content = reader(input_file)
+input_content = DictReader(input_file)
 
 # we want to have two output files: one for plural/singular cards and one for definition cards
 # the plural/singular file will have two columns, first the singular form then the plural
@@ -17,25 +17,19 @@ line_count = 0
 
 # iterate through each row and process
 for line in input_content:
-    # skip the header row of the input data
-    if line_count == 0:
-        line_count += 1
-        continue
-
     # print out the noun we're currently processing, and write the correct fields to the relevant file
-    print(line[0])
+    print(line["singular"])
 
-    if line[1] != "":
+    if line["plural"] != "":
         # we won't always have a plural form (some nouns are singular only) so in those cases, we don't 
         # want to make a card for the plural
-        writer(plurals_file).writerow([line[0], line[1]])
-    writer(definition_file).writerow([line[0], line[2]])
+        writer(plurals_file).writerow([line["singular"], line["plural"]])
+    writer(definition_file).writerow([line["singular"], line["translation"]])
 
     line_count += 1
 
-# print the number of lines processed, allowing for an off-by-one error
-# since there's a header row
-print(f'processed {line_count - 1} nouns')
+# print the number of lines processed
+print(f'processed {line_count} nouns')
 
 # close all the files
 input_file.close()
